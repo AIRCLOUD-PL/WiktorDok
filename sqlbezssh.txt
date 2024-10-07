@@ -1,0 +1,32 @@
+
+
+
+	sciągnąć obraz linuxa pod Virtual-Boxa np. Kali
+	po uruchomieniu ( user: kali, hasło: kali)
+	
+	zainstralować dockera:
+	
+	sudo apt update
+	sudo apt install docker.io
+
+	service docker status
+		jezeli nie działa uruchomic 
+			service docker start
+			
+	pobrać obraz mysql w dockerze 
+			docker pull mysql
+			
+	uruchomić mysqla z 
+		docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=0000 -p 3306:3306 mysql
+		
+	na tej samej instancji można się dostać do mysqla przez dockera::
+		docker exec -it mysql-container mysql -uroot -p
+	
+	
+		
+	na drugiej stacji można się dostać do mysqla:
+		mysql -u root -p -h 192.168.1.22 -P 3306 --ssl=FALSE 
+				uwaga, wyłaczyć SSL!
+				
+				
+	
