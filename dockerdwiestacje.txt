@@ -1,0 +1,59 @@
+uruchomienie docker na 2 serwerach:
+1:zainstalowack docker na obu serwerach
+2:zainsalowac dockre-compose na seeerwerze z wordpress
+3:na serverze nr1 uruchomic baze mysql na docker 
+	sudo apt install docker.io
+
+	service docker status
+		jezeli nie działa uruchomic 
+			service docker start
+			
+	pobrać obraz mysql w dockerze 
+			docker pull mysql
+			
+	uruchomić mysqla z 
+		docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=0000 -p 3306:3306 mysql
+		
+	na tej samej instancji można się dostać do mysqla przez dockera::
+		docker exec -it mysql-container mysql -uroot -p
+	
+	
+		
+	na drugiej stacji można się dostać do mysqla:
+		mysql -u root -p -h 192.168.1.22 -P 3306 --ssl=FALSE 
+				uwaga, wyłaczyć SSL!
+				
+				
+4: na bserwerze bazydanych stworzyc baze danych i stworzyc uzytkownika
+	 CREATE DATABASE wordpressdb;
+	 CREATE USER 'wordpress'@'%' IDENTIFIED BY '0000';
+	 GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'%';
+	 FLUSH PRIVILEGES;
+	 
+	
+
+	
+5:na srewerze nr2 stworzyc wordpress 
+!!!!!!!wazne dane uzytkowanika i bazy danych musza sie zgadzac z danymi w pliku docker-compose
+mkdir my_wordpress
+	cd my_wordpress/
+nano docker-compose.yml
+
+services:
+  wordpress:
+    image: wordpress:latest
+    volumes:
+      - wp_data:/var/www/html
+    ports:
+      - 80:80
+    restart: always
+    environment:
+      - WORDPRESS_DB_HOST=adressip serwera bazy danych
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_PASSWORD=0000
+      - WORDPRESS_DB_NAME=wordpress
+volumes:
+  wp_data:
+
+6:uruchomic dockera z wp znajdując sie w folderze /my_wordpress
+docker-compose up
